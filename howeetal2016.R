@@ -616,7 +616,7 @@ expand_singly <- function(
       )
     ) |>
     tidyr::unnest(
-      c({{var}}, !!!rlang::enquos(invariants), !!!enquos(events))
+      c({{var}}, !!!rlang::enquos(invariants), !!!rlang::enquos(events))
     )
 }
 
