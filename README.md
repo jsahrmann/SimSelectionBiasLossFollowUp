@@ -98,7 +98,7 @@ $S(u) = \prod_{k=1}^u 1 - \lambda(k)$. An intuitive way of estimating
 $\lambda(u)$ is
 
 $$
-\hat{\lambda}(u) = \frac{ \text{ \# individuals who experience the event at visit $u$ } }{ \text{ \# individuals at risk at visit $u$ } },
+\hat{\lambda}(u) = \frac{ \text{ number of individuals who experience the event at visit $u$ } }{ \text{ number of individuals at risk at visit $u$ } },
 $$
 
 where the number at risk is the number of individuals who haven’t
@@ -135,12 +135,21 @@ above. If we consider the probability of not being lost to follow up at
 each visit given values of our exposure and covariate—in other words,
 the survival function with respect to censoring at visit $u$,
 $S_{\text{cens}}(u \mid A, L) = P(C > u \mid A, L)$, then the IPC weight
-at visit $u$ is $$W(u) = \frac{ 1 }{ S_{\text{cens}}(u \mid A, L) }.$$
+at visit $u$ is
+
+$$
+W(u) = \frac{ 1 }{ S_{\text{cens}}(u \mid A, L) }.
+$$
+
 Viewed from the perspective of the hazard of censoring at visit $u$
 given values of our exposure and covariate,
 $\lambda_{\text{cens}}(u \mid A, L) = P(C = u \mid C \ge u, 1, A, L)$,
 then the weight at visit $u$ is
-$$W(u) = \frac{ 1 }{ \prod_{k=1}^u 1 - \lambda_{\text{cens}}(k \mid A, L) } = \frac{ 1 }{ \prod_{k=1}^u P[C = k \mid C \ge k, A, L] }.$$
+
+$$
+W(u) = \frac{ 1 }{ \prod_{k=1}^u 1 - \lambda_{\text{cens}}(k \mid A, L) } = \frac{ 1 }{ \prod_{k=1}^u P[C = k \mid C \ge k, A, L] }.
+$$
+
 Weights are set to zero for patients at the visit where they are lost to
 follow up.
 
@@ -152,7 +161,11 @@ disproportionate influence in analyses and increasing the variance of
 effect estimates. We can solve this problem through the use of
 stabilized weights by replacing the numerator in the previous equation
 with the hazard of censoring given only exposure,
-$$SW(u) = \frac{ \prod_{k=1}^u 1 - \lambda_{\text{cens}}(k \mid A) }{ \prod_{k=1}^u 1 - \lambda_{\text{cens}}(k \mid A, L) }.$$
+
+$$
+SW(u) = \frac{ \prod_{k=1}^u 1 - \lambda_{\text{cens}}(k \mid A) }{ \prod_{k=1}^u 1 - \lambda_{\text{cens}}(k \mid A, L) }.
+$$
+
 In contrast to the unstabilized weights, stabilized weights are not set
 to zero at the visit where patients become lost to follow up.
 
@@ -175,20 +188,19 @@ even in the simple scenario outlined by Howe et al.
 Details of the simulations can be found in the paper’s [supplementary
 material](https://pmc.ncbi.nlm.nih.gov/articles/PMC5008911/#SD1). All
 simulations involve building cohorts through pseudorandom number
-sampling. TODO.
-
-Results presented here were generated using R version 4.5, and all code
-can be found in [howeetal2016.R](./howeetal2016.R). Simulation scenarios
-are differentiated by their underlying data-generating processes. These
-are coded as functions named `make_data_*()`. A simulation run involves
-passing the name of one of these functions to the main function `sim()`
-along with the number of simulations, the number of observations in each
-fake data set, and an optional random number seed. The job of `sim()` is
-to collect the results of calling the real workhorse function `sim_1()`,
-which produces a single fake data set and runs three analyses: (1) a
-naive analysis, (2) an IPC-weighted analysis with nonparametrically
-estimated weights, and (3) an IPC-weighted analysis with parametrically
-estimated weights. Parallelization is achieved through the use of the
+sampling. Results presented here were generated using R version 4.5, and
+all code can be found in [howeetal2016.R](./howeetal2016.R). Simulation
+scenarios are differentiated by their underlying data-generating
+processes. These are coded as functions named `make_data_*()`. A
+simulation run involves passing the name of one of these functions to
+the main function `sim()` along with the number of simulations, the
+number of observations in each fake data set, and an optional random
+number seed. The job of `sim()` is to collect the results of calling the
+real workhorse function `sim_1()`, which produces a single fake data set
+and runs three analyses: (1) a naive analysis, (2) an IPC-weighted
+analysis with nonparametrically estimated weights, and (3) an
+IPC-weighted analysis with parametrically estimated weights.
+Parallelization is achieved through the use of the
 [furrr](https://furrr.futureverse.org/) package, a member of the
 [futureverse](https://www.futureverse.org/) family of packages.
 

@@ -44,7 +44,7 @@ For each measure, an estimate greater than zero indicates higher risk of the out
 To estimate these measures from observed data, we start with the hazard function, $\lambda(u)$, defined as $\lambda(u) = P(T = u \mid T \ge u)$; in words, the probability of experiencing the event at visit $u$ given that one has survived until at least visit $u$. The hazard function is related to the survival function through $S(u) = \prod_{k=1}^u 1 - \lambda(k)$. An intuitive way of estimating $\lambda(u)$ is
 
 $$
-\hat{\lambda}(u) = \frac{ \text{ \# individuals who experience the event at visit $u$ } }{ \text{ \# individuals at risk at visit $u$ } },
+\hat{\lambda}(u) = \frac{ \text{ number of individuals who experience the event at visit $u$ } }{ \text{ number of individuals at risk at visit $u$ } },
 $$
 
 where the number at risk is the number of individuals who haven't experienced the event or been censored prior to visit $u$ [@tutzandschmid2016a]. We can then estimate the overall survival function using a cumulative product of the hazard function estimates
@@ -60,24 +60,34 @@ To estimate the three effect measures, we stratify the calculation of $\hat{\lam
 However, as mentioned at the start, this method assumes that censoring is random. @howeetal2016a offer two solutions: stratification and inverse probability of censoring (IPC) weighting. Stratification simply involves estimating the hazard function in finer subsets of the sample defined by combinations of the values of the variables that influence censoring, but this becomes impractical as the number of variables increases or if continuous covariates are to be included. IPC weighting is a more general approach that reweights the contribution of each patient over the course of follow up by their estimated probability of becoming lost to follow up. This reweighting breaks the dependence between censoring and the variables used to estimate the weights.
 
 IPC weights can be defined using quantities similar to those described above. If we consider the probability of not being lost to follow up at each visit given values of our exposure and covariate---in other words, the survival function with respect to censoring at visit $u$, $S_{\text{cens}}(u \mid A, L) = P(C > u \mid A, L)$, then the IPC weight at visit $u$ is
-$$W(u) = \frac{ 1 }{ S_{\text{cens}}(u \mid A, L) }.$$
+
+$$
+W(u) = \frac{ 1 }{ S_{\text{cens}}(u \mid A, L) }.
+$$
+
 Viewed from the perspective of the hazard of censoring at visit $u$ given values of our exposure and covariate, $\lambda_{\text{cens}}(u \mid A, L) = P(C = u \mid C \ge u, 1, A, L)$, then the weight at visit $u$ is
-$$W(u) = \frac{ 1 }{ \prod_{k=1}^u 1 - \lambda_{\text{cens}}(k \mid A, L) } = \frac{ 1 }{ \prod_{k=1}^u P[C = k \mid C \ge k, A, L] }.$$
+
+$$
+W(u) = \frac{ 1 }{ \prod_{k=1}^u 1 - \lambda_{\text{cens}}(k \mid A, L) } = \frac{ 1 }{ \prod_{k=1}^u P[C = k \mid C \ge k, A, L] }.
+$$
+
 Weights are set to zero for patients at the visit where they are lost to follow up.
 
 #### Stabilizing weights
 
 In studies with many covariates, patients with rare combinations of covariate values may end up with large weights, giving those patients disproportionate influence in analyses and increasing the variance of effect estimates. We can solve this problem through the use of stabilized weights by replacing the numerator in the previous equation with the hazard of censoring given only exposure,
-$$SW(u) = \frac{ \prod_{k=1}^u 1 - \lambda_{\text{cens}}(k \mid A) }{ \prod_{k=1}^u 1 - \lambda_{\text{cens}}(k \mid A, L) }.$$
+
+$$
+SW(u) = \frac{ \prod_{k=1}^u 1 - \lambda_{\text{cens}}(k \mid A) }{ \prod_{k=1}^u 1 - \lambda_{\text{cens}}(k \mid A, L) }.
+$$
+
 In contrast to the unstabilized weights, stabilized weights are not set to zero at the visit where patients become lost to follow up.
 
 Estimation can be done nonparametrically or parametrically. Nonparametric estimation is similar to stratification, where now we estimate the weights in subsets of patients defined by unique combinations of covariate values. As before, this becomes impractical as the number of covariates grows or if any continuous covariates are used. Parametric estimation involves the use of a model such as pooled logistic regression to estimate the quantities used to compute the weights. The simulations of @howeetal2016a estimate weights nonparametrically, but a parametric approach would be more common in practce. The replication results presented below use both methods and demonstrate that the choice is not entirely straightforward even in the simple scenario outlined by @howeetal2016a.
 
 # Simulation details {#s-simulation-details}
 
-Details of the simulations can be found in the paper's [supplementary material](https://pmc.ncbi.nlm.nih.gov/articles/PMC5008911/#SD1). All simulations involve building cohorts through pseudorandom number sampling. TODO.
-
-Results presented here were generated using R version 4.5, and all code can be found in [howeetal2016.R](./howeetal2016.R). Simulation scenarios are differentiated by their underlying data-generating processes. These are coded as functions named `make_data_*()`. A simulation run involves passing the name of one of these functions to the main function `sim()` along with the number of simulations, the number of observations in each fake data set, and an optional random number seed. The job of `sim()` is to collect the results of calling the real workhorse function `sim_1()`, which produces a single fake data set and runs three analyses: (1) a naive analysis, (2) an IPC-weighted analysis with nonparametrically estimated weights, and (3) an IPC-weighted analysis with parametrically estimated weights. Parallelization is achieved through the use of the [furrr](https://furrr.futureverse.org/) package, a member of the [futureverse](https://www.futureverse.org/) family of packages.
+Details of the simulations can be found in the paper's [supplementary material](https://pmc.ncbi.nlm.nih.gov/articles/PMC5008911/#SD1). All simulations involve building cohorts through pseudorandom number sampling. Results presented here were generated using R version 4.5, and all code can be found in [howeetal2016.R](./howeetal2016.R). Simulation scenarios are differentiated by their underlying data-generating processes. These are coded as functions named `make_data_*()`. A simulation run involves passing the name of one of these functions to the main function `sim()` along with the number of simulations, the number of observations in each fake data set, and an optional random number seed. The job of `sim()` is to collect the results of calling the real workhorse function `sim_1()`, which produces a single fake data set and runs three analyses: (1) a naive analysis, (2) an IPC-weighted analysis with nonparametrically estimated weights, and (3) an IPC-weighted analysis with parametrically estimated weights. Parallelization is achieved through the use of the [furrr](https://furrr.futureverse.org/) package, a member of the [futureverse](https://www.futureverse.org/) family of packages.
 
 ## Code demonstration
 
