@@ -46,16 +46,16 @@ the primary simulations, our exposure of interest is injection drug use,
 $A$ (1: yes, 0: no), and another covariate is heavy alcohol use, $L$ (1:
 yes, 0: no). An elaboration of the primary simulation adds two
 additional covariates: CD4 cell count (a clinical marker of HIV
-progression; 1: $\ge 200$ per $\mu$l, 0: $\lt 200$ per $\mu$l) and level
-of education (1: college degree, 0: no college degree). A secondary
-simulation designed to emulate the real-world data analysis presented in
-the paper uses African American race as its main covariate and a
-composite variable as a second covariate. For variables whose values can
-change over time, we can specify the value at the time of a particular
-visit; for example, $A(u)$ represents injection drug use status at visit
-$u$. The goal of the analyses is to estimate the effect of injection
-drug use (or, for the secondary simulation, African American race) on
-time to death.
+progression; 1: $\ge 200$ per microliter, 0: $\lt 200$ per microliter)
+and level of education (1: college degree, 0: no college degree). A
+secondary simulation designed to emulate the real-world data analysis
+presented in the paper uses African American race as its main covariate
+and a composite variable as a second covariate. For variables whose
+values can change over time, we can specify the value at the time of a
+particular visit; for example, $A(u)$ represents injection drug use
+status at visit $u$. The goal of the analyses is to estimate the effect
+of injection drug use (or, for the secondary simulation, African
+American race) on time to death.
 
 A typical analysis would estimate the survival function at each visit
 $S(u) = P(T > u)$; that is, the probability of being alive at $u$. The
@@ -67,11 +67,23 @@ generate measures of effect. The simulations of Howe et al.
 ([2016](#ref-howeetal2016a)) present the overall survival function,
 $S(u)$, along with three effect measures  
 1. the risk difference (RD)
-$$RD(u) = \left[ 1 - S(u \mid A = 1) \right] - \left[ 1 - S(u \mid A = 0) \right],$$
-2. the log risk ratio (RR)
-$$\log RR(u) = \log \left( \frac{ 1 - S(u \mid A = 1) }{ 1 - S(u \mid A = 0) } \right),$$
-3. the log odds ratio (OR)
-$$\log OR(u) = \log \left( \frac{ \left[ 1 - S(u \mid A = 1) \right] / S(u \mid A = 1) }{ \left[ 1 - S(u \mid A = 0) \right] / S(u \mid A = 0) } \right).$$
+
+$$
+RD(u) = \left[ 1 - S(u \mid A = 1) \right] - \left[ 1 - S(u \mid A = 0) \right],
+$$
+
+2.  the log risk ratio (RR)
+
+$$
+\log RR(u) = \log \left( \frac{ 1 - S(u \mid A = 1) }{ 1 - S(u \mid A = 0) } \right),
+$$
+
+3.  the log odds ratio (OR)
+
+$$
+\log OR(u) = \log \left( \frac{ \left[ 1 - S(u \mid A = 1) \right] / S(u \mid A = 1) }{ \left[ 1 - S(u \mid A = 0) \right] / S(u \mid A = 0) } \right).
+$$
+
 For each measure, an estimate greater than zero indicates higher risk of
 the outcome in the exposed group, $A = 1$.
 
@@ -84,13 +96,22 @@ that one has survived until at least visit $u$. The hazard function is
 related to the survival function through
 $S(u) = \prod_{k=1}^u 1 - \lambda(k)$. An intuitive way of estimating
 $\lambda(u)$ is
-$$\hat{\lambda}(u) = \frac{ \text{ \# individuals who experience the event at visit $u$ } }{ \text{ \# individuals at risk at visit $u$ } },$$
+
+$$
+\hat{\lambda}(u) = \frac{ \text{ \# individuals who experience the event at visit $u$ } }{ \text{ \# individuals at risk at visit $u$ } },
+$$
+
 where the number at risk is the number of individuals who haven’t
 experienced the event or been censored prior to visit $u$ ([Tutz and
 Schmid 2016](#ref-tutzandschmid2016a)). We can then estimate the overall
 survival function using a cumulative product of the hazard function
-estimates $$\hat{S}(u) = \prod_{k=1}^u 1 - \hat{\lambda}(k).$$ To
-estimate the three effect measures, we stratify the calculation of
+estimates
+
+$$
+\hat{S}(u) = \prod_{k=1}^u 1 - \hat{\lambda}(k).
+$$
+
+To estimate the three effect measures, we stratify the calculation of
 $\hat{\lambda}(u)$ by exposure and plug the exposure-specific survival
 function estimates into the definitions above.
 
