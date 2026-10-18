@@ -11,6 +11,8 @@
 - [Results](#s-results)
   - [Simulation 1: Figure 1, Diagram I and Figure
     A1.1](#simulation-1-figure-1-diagram-i-and-figure-a11)
+  - [Simulation 2: Figure 1, Diagram II and Figure
+    A1.2](#simulation-2-figure-1-diagram-ii-and-figure-a12)
 - [Appendix](#appendix)
 - [References](#s-references)
 
@@ -85,7 +87,11 @@ $$
 $$
 
 For each measure, an estimate greater than zero indicates higher risk of
-the outcome in the exposed group, $A = 1$.
+the outcome in the exposed group, $A = 1$. Howe et al. refer to the
+survival function as an *absolute measure* and to the RD, RR, and OR as
+*relative measures*. Depending on what variables are causing the
+informative censoring, an absolute or relative measure (or both) could
+be subject to bias.
 
 ## Estimation
 
@@ -235,9 +241,9 @@ f1d1_dat
     10    10     0     0        150          75        36            36     0     0
     # ℹ 990 more rows
 
-A simulated data set consists of a patient identifier, the exposures $A$
-and covariate $L$, times to death, loss to follow up, and study end, the
-patient’s observed time, and indicators for whether the patient died or
+A simulated data set consists of a patient identifier; the exposures $A$
+and covariate $L$; times to death, loss to follow up, and study end; the
+patient’s observed time; and indicators for whether the patient died or
 was lost to follow up at the end of observation.
 
 Censoring is random in the first scenario and informative in the second
@@ -341,40 +347,102 @@ study, a patient must not have been lost to follow up.
 </figure>
 
 Both injection drug use $A$ and heavy alcohol use $L$ directly raise the
-risk of death $T$; neither variable causes loss to follow up. In this
-and subsequent diagrams, the exposure and covariate are written as if
-they were time-varying—e.g., the arrow between $A(u - 1)$ and $T$
-implies that injection drug use status at the previous visit affects
-risk of death by the next visit—however, exposure and covariates are
-fixed at baseline by design in the simulations.
+risk of death $T$; neither variable causes loss to follow up, resulting
+in no selection bias. In this and subsequent diagrams, the exposure and
+covariate are written as if they were time-varying—e.g., the arrow
+between $A(u - 1)$ and $T$ implies that injection drug use status at the
+previous visit affects risk of death by the next visit—however, exposure
+and covariates are fixed at baseline by design in the simulations.
 
 Times to death and loss to follow up are generated from exponential
-distributions with mean parameters $\mu_{\text{death}}$ and
-$\mu_{\text{cens}}$ (generically symbolized by $\mu_1$ and $\mu_2$ in
-the appendix). The influences of $A$ and $L$ on $T$ are the result of
-multiplying $\mu_{\text{death}}$ by $0.30$ for patients with $A = 1$, by
-$0.41$ for patients with $L = 1$, and by $0.30 \times 0.41 = 0.123$ for
-patients with $A = 1$ and $L = 1$. Values of $A$ and $L$ are
-independently sampled from a Bernoulli distribution with probability
-$0.5$.
+distributions with mean parameters $\mu_{\text{death}} = 20.09$ and
+$\mu_{\text{cens}} = 6.69$ (generically symbolized by $\mu_1$ and
+$\mu_2$ in the appendix). The influences of $A$ and $L$ on $T$ are the
+result of multiplying $\mu_{\text{death}}$ by $0.30$ for patients with
+$A = 1$, by $0.41$ for patients with $L = 1$, and by
+$0.30 \times 0.41 = 0.123$ for patients with $A = 1$ and $L = 1$.
+Because these factors are all less than one, the effect is to decrease
+the average time to death. Values of $A$ and $L$ are independently
+sampled from a Bernoulli distribution with probability $0.5$.
 
-An immediate difficulty we encounter is that the parameters for the
-exponential distributions representing time to death and time to loss to
-follow up cannot be correct. TODO.
+An immediate difficulty we encounter is that the reported values for the
+mean parameters $\mu_{\text{death}}$ and $\mu_{\text{cens}}$ cannot have
+been used to generate the results in appendix Figures A1.1-5. A quick
+check is that Figure A1.1 indicates a survival probability of about 0.6
+by visit 36, whereas an exponential distribution with mean 20.09 would
+have a survival probability of approximately 0.17 by visit 36 before
+taking into account further reductions in survival time from the effects
+of $A$ and $L$. Fortunately, though, shifting decimal places once to the
+right appears to get close to the correct values, resulting in
+$\mu_{\text{death}} = 200.9$ and $\mu_{\text{cens}} = 66.9$.
 
-![Figure A1.1, Version 1: Simulation results for the scenario without
+A replication of Figure A1.1 is given below.
+
+<figure>
+<img src="./img/FigureA_1_1000_noNpWeights.webp">
+<figcaption>
+Figure A1.1, Version 1: Simulation results for the scenario without
 selection bias due to loss to follow up (500 simulations, 1000
-observations per simulation)](./img/FigureA_1_1000_noNpWeights.webp)
+observations per simulation).
+</figcaption>
+</figure>
+
+The overall survival estimates in the top-left panel appear to be too
+low, either because the new mean parameters aren’t exactly correct or
+due to a subtler difference in generating the data. Results for the
+relative effect measures agree quite well.
+
+The mean squared error panels generally agree in trend if not level. The
+exception is survival, where differences are notable and which is the
+case throughout all the simulation scenarios. The reasons for this are
+unclear, although my personal opinion is that the patterns seen in the
+replications make more sense than those presented in the paper. For
+example, survival is 1.0 at the start of follow up across all
+simulations, so error should be lowest at visit 1 and should steadily
+increase thereafter. Instead, the figure in Howe et al.
+([2016](#ref-howeetal2016a)) has relatively large error early in follow
+up followed by a decreasing (but jagged) trend at intermediate time
+points before a spike at visit 36 (presumably an artifact of
+administrative censoring at that point). Patterns in the errors of the
+other effect measures are similar, but the levels of error in the
+replication are several orders of magnitude larger. Again, it’s unclear
+if these discrepancies are a result of differences in how simulation
+variance was calculated or whether the original simulations were based
+on more than the 1000 observations and/or 500 iterations reported (see
+below for results based on a larger number of observations per
+simulation).
+
+These idiosyncracies notwithstanding, the results are consistent with no
+selection bias—both crude and weighted approaches estimate overall
+survival and each relative effect measure without bias.
+
+## Simulation 2: Figure 1, Diagram II and Figure A1.2
+
+In scenario 2, heavy alcohol use raises the risk of loss to follow up,
+denoted by a new arrow from $L$ to $D$ in Figure 1, Diagram II.
+
+<figure>
+<img src="./img/fig1_ii.png">
+<figcaption>
+Figure 1, Diagram 2: Directed acyclic graph for a scenario where a
+covariate causes informative censoring. Notation is the same as Figure
+1, Diagram 1.
+</figcaption>
+</figure>
+
+Simulation results for this scenario, corresponding to Figure A1.2 in
+the appendix, follow.
+
+<figure>
+<img src="./img/FigureA_2_1000_noNpWeights.webp">
+<figcaption>
+Figure A1.2, Version 1: Simulation results for the scenario where a
+covariate cuases informative censoring (500 simulations, 1000
+observations per simulation).
+</figcaption>
+</figure>
 
 See Figure A1.1, Version 2 in the [Appendix](#appendix).
-
-![Figure A1.1: Simulation results for the scenario without selection
-bias due to loss to follow up (500 simulations, 1000 observations per
-simulation)](./img/FigureA_1_1000.webp)
-
-![Figure A1.2](./img/FigureA_2_1000.webp)
-
-![Figure A1.3](./img/FigureA_3_1000.webp)
 
 ![Figure A1.4: Simulation results for the scenario where both the
 exposure and a covariate affect loss to follow up (500 simulations, 1000

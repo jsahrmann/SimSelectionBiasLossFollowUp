@@ -8,7 +8,7 @@
 # [5] [Defusing R expressions](https://rlang.r-lib.org/reference/topic-defuse.html)
 #
 # Date created: 20250606
-# Last modified: 20260614
+# Last modified: 20260901
 # John M Sahrmann
 
 
@@ -1874,19 +1874,19 @@ saveRDS(sim_f2d1x, file = "./sim_f2d1_500_20000_20260509.rds")
 
 # ** Load simulations
 
-sim_f1d1_1000 <- readRDS("./sim_f1d1_500_1000_20260509.rds")
-sim_f1d2_1000 <- readRDS("./sim_f1d2_500_1000_20260509.rds")
-sim_f1d3_1000 <- readRDS("./sim_f1d3_500_1000_20260509.rds")
-sim_f1d4_1000 <- readRDS("./sim_f1d4_500_1000_20260509.rds")
-sim_f1d5_1000 <- readRDS("./sim_f1d5_500_1000_20260509.rds")
-sim_f2d1_1000 <- readRDS("./sim_f2d1_500_1000_20260509.rds")
+sim_f1d1_1000 <- readRDS("./results/sim_f1d1_500_1000_20260509.rds")
+sim_f1d2_1000 <- readRDS("./results/sim_f1d2_500_1000_20260509.rds")
+sim_f1d3_1000 <- readRDS("./results/sim_f1d3_500_1000_20260509.rds")
+sim_f1d4_1000 <- readRDS("./results/sim_f1d4_500_1000_20260509.rds")
+sim_f1d5_1000 <- readRDS("./results/sim_f1d5_500_1000_20260509.rds")
+sim_f2d1_1000 <- readRDS("./results/sim_f2d1_500_1000_20260509.rds")
 
-sim_f1d1_20000 <- readRDS("./sim_f1d1_500_20000_20260509.rds")
-sim_f1d2_20000 <- readRDS("./sim_f1d2_500_20000_20260509.rds")
-sim_f1d3_20000 <- readRDS("./sim_f1d3_500_20000_20260509.rds")
-sim_f1d4_20000 <- readRDS("./sim_f1d4_500_20000_20260509.rds")
-sim_f1d5_20000 <- readRDS("./sim_f1d5_500_20000_20260509.rds")
-sim_f2d1_20000 <- readRDS("./sim_f2d1_500_20000_20260509.rds")
+sim_f1d1_20000 <- readRDS("./results/sim_f1d1_500_20000_20260509.rds")
+sim_f1d2_20000 <- readRDS("./results/sim_f1d2_500_20000_20260509.rds")
+sim_f1d3_20000 <- readRDS("./results/sim_f1d3_500_20000_20260509.rds")
+sim_f1d4_20000 <- readRDS("./results/sim_f1d4_500_20000_20260509.rds")
+sim_f1d5_20000 <- readRDS("./results/sim_f1d5_500_20000_20260509.rds")
+sim_f2d1_20000 <- readRDS("./results/sim_f2d1_500_20000_20260509.rds")
 
 
 # ** Summarize simulations
@@ -2020,6 +2020,14 @@ webpea(
   "FigureA_2_1000.webp", plot = fig_f1d2_1000,
   width = 1200, height = 630, dpi = 72, units = "px"
 )
+plots_f1d2_1000_ <- toplot_f1d2_1000 |>
+  visualize_sim_stats_()
+fig_f1d2_1000_ <- plots_f1d2_1000_ |>
+  organize_plots()
+webpea(
+  "./img/FigureA_2_1000_noNpWeights.webp", plot = fig_f1d2_1000_,
+  width = 1200, height = 630, dpi = 72, units = "px"
+)
 
 toplot_f1d3_1000 <- stats_f1d3_1000 |>
   select(!starts_with("var_")) |>
@@ -2029,7 +2037,15 @@ plots_f1d3_1000 <- toplot_f1d3_1000 |>
 fig_f1d3_1000 <- plots_f1d3_1000 |>
   organize_plots()
 webpea(
-  "FigureA_3_1000.webp", plot = fig_f1d3_1000,
+  "./img/FigureA_3_1000.webp", plot = fig_f1d3_1000,
+  width = 1200, height = 630, dpi = 72, units = "px"
+)
+plots_f1d3_1000_ <- toplot_f1d3_1000 |>
+  visualize_sim_stats_()
+fig_f1d3_1000_ <- plots_f1d3_1000_ |>
+  organize_plots()
+webpea(
+  "./img/FigureA_3_1000_noNpWeights.webp", plot = fig_f1d3_1000_,
   width = 1200, height = 630, dpi = 72, units = "px"
 )
 
@@ -2041,7 +2057,15 @@ plots_f1d4_1000 <- toplot_f1d4_1000 |>
 fig_f1d4_1000 <- plots_f1d4_1000 |>
   organize_plots()
 webpea(
-  "FigureA_4_1000.webp", plot = fig_f1d4_1000,
+  "./img/FigureA_4_1000.webp", plot = fig_f1d4_1000,
+  width = 1200, height = 630, dpi = 72, units = "px"
+)
+plots_f1d4_1000_ <- toplot_f1d4_1000 |>
+  visualize_sim_stats_()
+fig_f1d4_1000_ <- plots_f1d4_1000_ |>
+  organize_plots()
+webpea(
+  "./img/FigureA_4_1000_noNpWeights.webp", plot = fig_f1d4_1000_,
   width = 1200, height = 630, dpi = 72, units = "px"
 )
 
@@ -2053,7 +2077,15 @@ plots_f1d5_1000 <- toplot_f1d5_1000 |>
 fig_f1d5_1000 <- plots_f1d5_1000 |>
   organize_plots()
 webpea(
-  "FigureA_5_1000.webp", plot = fig_f1d5_1000,
+  "./img/FigureA_5_1000.webp", plot = fig_f1d5_1000,
+  width = 1200, height = 630, dpi = 72, units = "px"
+)
+plots_f1d5_1000_ <- toplot_f1d5_1000 |>
+  visualize_sim_stats_()
+fig_f1d5_1000_ <- plots_f1d5_1000_ |>
+  organize_plots()
+webpea(
+  "./img/FigureA_5_1000_noNpWeights.webp", plot = fig_f1d5_1000_,
   width = 1200, height = 630, dpi = 72, units = "px"
 )
 
@@ -2066,13 +2098,17 @@ plots_f1d1_20000 <- toplot_f1d1_20000 |>
   visualize_sim_stats()
 fig_f1d1_20000 <- plots_f1d1_20000 |>
   organize_plots()
-ggsave(
-  paste0(
-    "FigureA_1_20000_",
-    tt(),
-    ".pdf"
-  ),
-  plot = fig_f1d1_20000, width = 11, height = 7, units = "in"
+webpea(
+  "./img/FigureA_1_20000.webp", plot = fig_f1d1_20000,
+  width = 1200, height = 630, dpi = 72, units = "px"
+)
+plots_f1d1_20000_ <- toplot_f1d1_20000 |>
+  visualize_sim_stats_()
+fig_f1d1_20000_ <- plots_f1d1_20000_ |>
+  organize_plots()
+webpea(
+  "./img/FigureA_1_20000_noNpWeights.webp", plot = fig_f1d1_20000_,
+  width = 1200, height = 630, dpi = 72, units = "px"
 )
 
 toplot_f1d2_20000 <- stats_f1d2_20000 |>
@@ -2082,13 +2118,17 @@ plots_f1d2_20000 <- toplot_f1d2_20000 |>
   visualize_sim_stats()
 fig_f1d2_20000 <- plots_f1d2_20000 |>
   organize_plots()
-ggsave(
-  paste0(
-    "FigureA_2_20000_",
-    tt(),
-    ".pdf"
-  ),
-  plot = fig_f1d2_20000, width = 11, height = 7, units = "in"
+webpea(
+  "./img/FigureA_2_20000.webp", plot = fig_f1d2_20000,
+  width = 1200, height = 630, dpi = 72, units = "px"
+)
+plots_f1d2_20000_ <- toplot_f1d2_20000 |>
+  visualize_sim_stats_()
+fig_f1d2_20000_ <- plots_f1d2_20000_ |>
+  organize_plots()
+webpea(
+  "./img/FigureA_2_20000_noNpWeights.webp", plot = fig_f1d2_20000_,
+  width = 1200, height = 630, dpi = 72, units = "px"
 )
 
 toplot_f1d3_20000 <- stats_f1d3_20000 |>
@@ -2098,13 +2138,17 @@ plots_f1d3_20000 <- toplot_f1d3_20000 |>
   visualize_sim_stats()
 fig_f1d3_20000 <- plots_f1d3_20000 |>
   organize_plots()
-ggsave(
-  paste0(
-    "FigureA_3_20000_",
-    tt(),
-    ".pdf"
-  ),
-  plot = fig_f1d3_20000, width = 11, height = 7, units = "in"
+webpea(
+  "./img/FigureA_3_20000.webp", plot = fig_f1d3_20000,
+  width = 1200, height = 630, dpi = 72, units = "px"
+)
+plots_f1d3_20000_ <- toplot_f1d3_20000 |>
+  visualize_sim_stats_()
+fig_f1d3_20000_ <- plots_f1d3_20000_ |>
+  organize_plots()
+webpea(
+  "./img/FigureA_3_20000_noNpWeights.webp", plot = fig_f1d3_20000_,
+  width = 1200, height = 630, dpi = 72, units = "px"
 )
 
 toplot_f1d4_20000 <- stats_f1d4_20000 |>
@@ -2114,13 +2158,17 @@ plots_f1d4_20000 <- toplot_f1d4_20000 |>
   visualize_sim_stats()
 fig_f1d4_20000 <- plots_f1d4_20000 |>
   organize_plots()
-ggsave(
-  paste0(
-    "FigureA_4_20000_",
-    tt(),
-    ".pdf"
-  ),
-  plot = fig_f1d4_20000, width = 11, height = 7, units = "in"
+webpea(
+  "./img/FigureA_4_20000.webp", plot = fig_f1d4_20000,
+  width = 1200, height = 630, dpi = 72, units = "px"
+)
+plots_f1d4_20000_ <- toplot_f1d4_20000 |>
+  visualize_sim_stats_()
+fig_f1d4_20000_ <- plots_f1d4_20000_ |>
+  organize_plots()
+webpea(
+  "./img/FigureA_4_20000_noNpWeights.webp", plot = fig_f1d4_20000_,
+  width = 1200, height = 630, dpi = 72, units = "px"
 )
 
 toplot_f1d5_20000 <- stats_f1d5_20000 |>
@@ -2130,11 +2178,15 @@ plots_f1d5_20000 <- toplot_f1d5_20000 |>
   visualize_sim_stats()
 fig_f1d5_20000 <- plots_f1d5_20000 |>
   organize_plots()
-ggsave(
-  paste0(
-    "FigureA_5_20000_",
-    tt(),
-    ".pdf"
-  ),
-  plot = fig_f1d5_20000, width = 11, height = 7, units = "in"
+webpea(
+  "./img/FigureA_5_20000.webp", plot = fig_f1d5_20000,
+  width = 1200, height = 630, dpi = 72, units = "px"
+)
+plots_f1d5_20000_ <- toplot_f1d5_20000 |>
+  visualize_sim_stats_()
+fig_f1d5_20000_ <- plots_f1d5_20000_ |>
+  organize_plots()
+webpea(
+  "./img/FigureA_5_20000_noNpWeights.webp", plot = fig_f1d5_20000_,
+  width = 1200, height = 630, dpi = 72, units = "px"
 )
